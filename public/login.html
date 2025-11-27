@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - NOC Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/auth.css">
+</head>
+<body class="dark-mode auth-page">
+    <div class="auth-container">
+        <div class="auth-card">
+            <!-- Logo -->
+            <div class="auth-logo">
+                <img src="https://ituniverse.com.br/wp-content/uploads/2025/02/logo-ITUniverse-negativ.svg" alt="IT Universe">
+            </div>
+
+            <h1 class="auth-title">NOC Dashboard</h1>
+            <p class="auth-subtitle">Centro de Operações de Rede</p>
+
+            <!-- Alertas -->
+            <div id="alert-container"></div>
+
+            <!-- Login com Microsoft -->
+            <div id="microsoft-login" class="auth-section">
+                <button id="microsoft-btn" class="auth-btn auth-btn-microsoft">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <rect x="2" y="2" width="9" height="9" fill="#F25022"/>
+                        <rect x="13" y="2" width="9" height="9" fill="#7FBA00"/>
+                        <rect x="2" y="13" width="9" height="9" fill="#00A4EF"/>
+                        <rect x="13" y="13" width="9" height="9" fill="#FFB900"/>
+                    </svg>
+                    Entrar com Microsoft 365
+                </button>
+            </div>
+
+            <!-- Divisor -->
+            <div class="auth-divider">
+                <span>ou</span>
+            </div>
+
+            <!-- Login com Código de Bypass -->
+            <div id="bypass-login" class="auth-section">
+                <button id="bypass-toggle" class="auth-link">
+                    Código de emergência
+                </button>
+
+                <form id="bypass-form" style="display: none;">
+                    <div class="form-group">
+                        <label class="form-label">Código de Bypass</label>
+                        <input 
+                            type="text" 
+                            id="bypass-code" 
+                            class="form-input" 
+                            placeholder="Digite o código de 12 caracteres"
+                            maxlength="12"
+                            autocomplete="off"
+                        >
+                        <p class="form-hint">Use apenas em caso de emergência</p>
+                    </div>
+                    <button type="submit" class="auth-btn auth-btn-bypass">
+                        Entrar com Bypass
+                    </button>
+                    <button type="button" id="bypass-cancel" class="auth-link" style="margin-top: 0.5rem;">
+                        Cancelar
+                    </button>
+                </form>
+            </div>
+
+            <!-- Loading -->
+            <div id="loading" style="display: none; text-align: center; margin-top: 1rem;">
+                <div class="spinner"></div>
+                <p>Autenticando...</p>
+            </div>
+
+            <!-- Footer -->
+            <div class="auth-footer">
+                <p>IT Universe Tecnologia da Informação LTDA</p>
+                <p>CNPJ: 12.056.887/0001-19</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuração do Microsoft OAuth
+        let microsoftConfig = null;
+
+        // Carregar configurações
+        async function loadConfig() {
+            try {
+                const response = await fetch('/api/config/public');
+                const data = await response.json();
+                
+                microsoftConfig = {
+                    tenantId: data.microsoft_tenant_id,
+                    clientId: data.microsoft_client_id,
+                    redirectUri: `${window.location.origin}/auth/callback`
+                };
+
+                // Verificar se auth está habilitada
+                if (data.auth_enabled === 'false') {
+                    // Redirecionar direto para dashboard
+                    window.location.href = '/';
+                }
+            } catch (error) {
+                console.error('Erro ao carregar configurações:', error);
+            }
+        }
+
+        // Login com Microsoft
+        document.getElementById('microsoft-btn').addEventListener('click', () => {
+            if (!microsoftConfig || !microsoftConfig.clientId) {
+                showAlert('Autenticação Microsoft não configurada', 'danger');
+                return;
+            }
+
+            const authUrl = `https://login.microsoftonline.com/${microsoftConfig.tenantId}/oauth2/v2.0/authorize?` +
+                `client_id=${microsoftConfig.clientId}` +
+                `&response_type=code` +
+                `&redirect_uri=${encodeURIComponent(microsoftConfig.redirectUri)}` +
+                `&scope=openid%20profile%20email%20User.Read` +
+                `&response_mode=query`;
+
+            window.location.href = authUrl;
+        });
+
+        // Toggle bypass form
+        document.getElementById('bypass-toggle').addEventListener('click', () => {
+            document.getElementById('bypass-form').style.display = 'block';
+            document.getElementById('bypass-toggle').style.display = 'none';
+            document.getElementById('bypass-code').focus();
+        });
+
+        document.getElementById('bypass-cancel').addEventListener('click', () => {
+            document.getElementById('bypass-form').style.display = 'none';
+            document.getElementById('bypass-toggle').style.display = 'block';
+            document.getElementById('bypass-code').value = '';
+        });
+
+        // Login com bypass
+        document.getElementById('bypass-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const code = document.getElementById('bypass-code').value.trim();
+
+            if (!code) {
+                showAlert('Digite o código de bypass', 'danger');
+                return;
+            }
+
+            document.getElementById('loading').style.display = 'block';
+
+            try {
+                const response = await fetch('/api/auth/bypass', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Salvar token
+                    localStorage.setItem('auth_token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+
+                    showAlert('Login realizado com sucesso!', 'success');
+                    
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 500);
+                } else {
+                    showAlert(data.error || 'Código inválido', 'danger');
+                }
+            } catch (error) {
+                console.error('Erro no login:', error);
+                showAlert('Erro ao autenticar', 'danger');
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        });
+
+        // Processar callback do Microsoft
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        const error = urlParams.get('error');
+
+        if (error) {
+            showAlert(`Erro no login Microsoft: ${error}`, 'danger');
+        } else if (code) {
+            // Processar código de autorização
+            document.getElementById('loading').style.display = 'block';
+
+            fetch('/api/auth/microsoft/callback', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.token) {
+                    localStorage.setItem('auth_token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+
+                    showAlert('Login realizado com sucesso!', 'success');
+                    
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 500);
+                } else {
+                    showAlert(data.error || 'Erro ao autenticar', 'danger');
+                    // Limpar URL
+                    window.history.replaceState({}, document.title, '/login.html');
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                showAlert('Erro ao processar login', 'danger');
+            })
+            .finally(() => {
+                document.getElementById('loading').style.display = 'none';
+            });
+        }
+
+        // Função auxiliar para alertas
+        function showAlert(message, type) {
+            const container = document.getElementById('alert-container');
+            const alert = document.createElement('div');
+            alert.className = `alert-box alert-${type}`;
+            alert.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" style="width: 1.25rem; height: 1.25rem;">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                <span>${message}</span>
+            `;
+            container.appendChild(alert);
+
+            setTimeout(() => alert.remove(), 5000);
+        }
+
+        // Verificar se já está logado
+        const token = localStorage.getItem('auth_token');
+        if (token) {
+            fetch('/api/auth/verify', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            })
+            .then(res => {
+                if (res.ok) {
+                    window.location.href = '/';
+                }
+            });
+        }
+
+        // Carregar configurações ao iniciar
+        loadConfig();
+    </script>
+</body>
+</html>
