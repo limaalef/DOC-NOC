@@ -1,14 +1,11 @@
 {
   "name": "noc-dashboard",
-  "version": "2.0.0",
-  "description": "NOC Dashboard IT Universe - Sistema de Gestão de POPs e Escalas com SQLite",
+  "version": "1.0.0",
+  "description": "NOC Dashboard IT Universe - Sistema de gestão de conhecimento e organização de pessoal",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "migrate": "node migrate-to-db.js",
-    "migrate:prod": "node migrate-to-db.js /opt/noc-dashboard/data /opt/noc-dashboard/data/noc.db",
-    "backup": "node backup-db.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -16,19 +13,17 @@
     "dashboard",
     "pops",
     "escalas",
-    "monitoring",
-    "sqlite"
+    "monitoring"
   ],
   "author": "IT Universe Tecnologia da Informação LTDA",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.19.2",
+    "express": "^4.18.2",
     "cors": "^2.8.5",
-    "body-parser": "^1.20.2",
-    "sqlite3": "^5.1.7"
+    "body-parser": "^1.20.2"
   },
   "devDependencies": {
-    "nodemon": "^3.1.0"
+    "nodemon": "^3.0.1"
   },
   "engines": {
     "node": ">=18.0.0",
