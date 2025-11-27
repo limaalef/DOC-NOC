@@ -1,0 +1,633 @@
+/* Importa estilos base do style.css - variáveis, tema, base */
+/* Este arquivo adiciona estilos específicos para a página de admin */
+
+/* Admin Layout */
+.admin-layout {
+    display: grid;
+    grid-template-columns: 450px 1fr;
+    gap: 1.5rem;
+}
+
+#pop-form {
+    min-width: 894px;
+}
+
+@media (max-width: 1400px) {
+    #pop-form {
+        min-width: 0px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .admin-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Form Elements */
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--text-primary);
+}
+
+.form-input,
+.form-textarea,
+.form-select {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    cursor: pointer;
+}
+
+.form-textarea {
+    min-height: 100px;
+    resize: vertical;
+    font-family: 'Courier New', monospace;
+}
+
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+    outline: none;
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Buttons */
+.btn {
+    padding: 0.625rem 1.25rem;
+    border-radius: 0.5rem;
+    border: none;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn svg {
+    width: 1rem;
+    height: 1rem;
+    stroke-width: 2;
+}
+
+.btn-primary {
+    background-color: var(--accent-blue);
+    color: white;
+}
+
+.btn-primary:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+}
+
+.btn-success {
+    background-color: var(--accent-green);
+    color: white;
+}
+
+.btn-success:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
+}
+
+.btn-danger {
+    background-color: var(--accent-red);
+    color: white;
+}
+
+.btn-danger:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(239, 68, 68, 0.3);
+}
+
+.btn-secondary {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+    background-color: var(--bg-forthary);
+}
+
+.btn-group {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.btn-icon {
+    padding: 0.5rem;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-icon svg {
+    width: 1rem;
+    height: 1rem;
+    stroke-width: 2;
+}
+
+/* Dynamic Lists */
+.dynamic-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.dynamic-item {
+    display: flex;
+    gap: 0.5rem;
+    align-items: start;
+}
+
+.dynamic-item input,
+.dynamic-item textarea {
+    flex: 1;
+}
+
+/* POP List Admin */
+.pop-list-admin {
+    max-height: calc(100vh - 280px);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.pop-list-admin::-webkit-scrollbar {
+    width: 8px;
+}
+
+.pop-list-admin::-webkit-scrollbar-track {
+    background: var(--bg-tertiary);
+    border-radius: 4px;
+}
+
+.pop-list-admin::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
+.pop-list-admin::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
+}
+
+.pop-list-item {
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    background-color: var(--bg-tertiary);
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 2px solid transparent;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pop-list-item:hover {
+    transform: translateX(-4px);
+    border-color: var(--border-color);
+}
+
+.pop-list-item.active {
+    background-color: var(--header-color);
+    color: white;
+    border-color: var(--accent-red);
+}
+
+.pop-list-item-info h4 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.pop-list-item-info p {
+    font-size: 0.75rem;
+    opacity: 0.8;
+}
+
+.pop-list-item.active .pop-list-item-info p {
+    opacity: 0.9;
+}
+
+/* Alert Boxes */
+.alert-box {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.875rem;
+    animation: slideInDown 0.3s ease-out;
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.alert-box svg {
+    flex-shrink: 0;
+}
+
+.alert-info {
+    background-color: rgba(59, 130, 246, 0.1);
+    border: 1px solid var(--accent-blue);
+    color: var(--accent-blue);
+}
+
+.dark-mode .alert-info {
+    background-color: rgba(59, 130, 246, 0.15);
+}
+
+.alert-success {
+    background-color: rgba(16, 185, 129, 0.1);
+    border: 1px solid var(--accent-green);
+    color: var(--accent-green);
+}
+
+.dark-mode .alert-success {
+    background-color: rgba(16, 185, 129, 0.15);
+}
+
+.alert-danger {
+    background-color: rgba(239, 68, 68, 0.1);
+    border: 1px solid var(--accent-red);
+    color: var(--accent-red);
+}
+
+.dark-mode .alert-danger {
+    background-color: rgba(239, 68, 68, 0.15);
+}
+
+/* Section Divider */
+.section-divider {
+    border: none;
+    border-top: 2px solid var(--border-color);
+    margin: 1.5rem 0;
+}
+
+/* Form Hint */
+.form-hint {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+    font-style: italic;
+}
+
+/* Badges */
+.badge {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.badge-blue { 
+    background-color: var(--accent-blue); 
+    color: white; 
+}
+
+.badge-purple { 
+    background-color: var(--accent-purple); 
+    color: white; 
+}
+
+.badge-green { 
+    background-color: var(--accent-green); 
+    color: white; 
+}
+
+.badge-orange { 
+    background-color: var(--accent-orange); 
+    color: white; 
+}
+
+/* Detail Type Selector */
+.detail-type-selector {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.detail-type-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.detail-type-btn:hover {
+    background-color: var(--bg-forthary);
+}
+
+.detail-type-btn.active {
+    background-color: var(--accent-blue);
+    color: white;
+    border-color: var(--accent-blue);
+}
+
+/* Detail Editor */
+.detail-editor {
+    background-color: var(--bg-tertiary);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-top: 0.5rem;
+    border: 1px solid var(--border-color);
+}
+
+/* Procedure Item Container */
+.procedure-item-container {
+    flex-direction: column !important;
+    border: 1px solid var(--border-color);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    background-color: var(--bg-tertiary);
+}
+
+.procedure-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+    gap: 1rem;
+    align-items: center;    
+}
+
+.procedure-item-header strong {
+    font-size: 0.875rem;
+    color: var(--text-primary);
+}
+
+.procedure-details-list {
+    margin-top: 0.75rem;
+    width: 100%;
+    border-radius: 0.375rem;
+}
+
+.procedure-detail-item {
+    margin-bottom: 0.75rem;
+    padding: 0.75rem;
+    background-color: var(--bg-secondary);
+    border-radius: 0.375rem;
+    border: 1px solid var(--border-color);
+}
+
+.detail-type-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.detail-type-select {
+    flex: 1;
+    font-size: 0.75rem;
+}
+
+.detail-content {
+    margin-top: 0.5rem;
+}
+
+/* JSON Preview */
+.json-preview {
+    background-color: var(--bg-tertiary);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.75rem;
+    max-height: 400px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    border: 1px solid var(--border-color);
+}
+
+/* Loading & Error States */
+.loading {
+    text-align: center;
+    color: var(--text-secondary);
+    padding: 2rem;
+    font-size: 0.875rem;
+}
+
+.error {
+    background-color: rgba(239, 68, 68, 0.1);
+    border: 1px solid var(--accent-red);
+    color: var(--accent-red);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin: 1rem 0;
+    font-size: 0.875rem;
+    text-align: center;
+}
+
+/* Form Title with Icon */
+.form-title {
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.form-title svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    stroke-width: 2;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .btn-group {
+        flex-direction: column;
+    }
+    
+    .btn-group .btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .dynamic-item {
+        flex-direction: column;
+    }
+    
+    .btn-icon {
+        align-self: flex-end;
+    }
+}
+
+/* Improve readability for dark mode */
+.dark-mode .form-input,
+.dark-mode .form-textarea,
+.dark-mode .form-select {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.dark-mode .form-input::placeholder,
+.dark-mode .form-textarea::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.6;
+}
+
+/* Light mode specific adjustments */
+body:not(.dark-mode) .form-input,
+body:not(.dark-mode) .form-textarea,
+body:not(.dark-mode) .form-select {
+    background-color: var(--bg-tertiary);
+}
+
+body:not(.dark-mode) .procedure-item-container {
+    background-color: var(--bg-tertiary);
+}
+
+body:not(.dark-mode) .procedure-detail-item {
+    background-color: var(--bg-primary);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.dynamic-item {
+    animation: fadeIn 0.2s ease-out;
+}
+
+/* Scrollbar for JSON Preview */
+.json-preview::-webkit-scrollbar {
+    width: 8px;
+}
+
+.json-preview::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+    border-radius: 4px;
+}
+
+.json-preview::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
+.json-preview::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
+}
+
+/* Zabbix Alert Representation */
+.detail-zabbix-alert {
+    margin-top: 0.75rem;
+    border: 1px solid #383838;
+    border-radius: 0;
+}
+
+.zabbix-alert-cell {
+    position: relative;
+    padding: 6px 5px;
+    line-height: 18px;
+    text-align: left;
+    vertical-align: top;
+    background-color: #7499FF;
+    color: #00268e;
+    white-space: normal;
+    word-break: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.zabbix-alert-link {
+    color: #00268e;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.zabbix-alert-link:hover {
+    text-decoration: underline;
+}
+
+/* Dark mode adjustments for Zabbix alert */
+body:not(.dark-mode) .detail-zabbix-alert {
+    border-color: #d0d0d0;
+}
+
+body:not(.dark-mode) .zabbix-alert-cell {
+    background-color: #7499FF;
+    color: #00268e;
+}
+
+/* Zabbix Severity Selector */
+.severity-selector {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.severity-option {
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.25rem;
+    border: 2px solid transparent;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.severity-option:hover {
+    opacity: 0.8;
+}
+
+.severity-option.selected {
+    border-color: var(--text-primary);
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+}
+
+/* Zabbix severity colors */
+.severity-not-classified { background-color: #97AAB3; color: #fff; }
+.severity-information { background-color: #7499FF; color: #00268e; }
+.severity-warning { background-color: #FFC859; color: #7f5c00; }
+.severity-average { background-color: #FFA059; color: #7f3a00; }
+.severity-high { background-color: #E97659; color: #7f1e00; }
+.severity-disaster { background-color: #E45959; color: #7f0000; }

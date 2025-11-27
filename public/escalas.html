@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escalas de Plantão - NOC IT Universe</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/escalas.css">
+</head>
+<body class="dark-mode">
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <img src="https://ituniverse.com.br/wp-content/uploads/2025/02/logo-ITUniverse-negativ.svg" alt="IT Universe" class="logo-img">
+                    <div>
+                        <h1>Escalas de Plantão NOC</h1>
+                        <p class="subtitle">Gestão de Turnos e Responsáveis</p>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                    <a href="index.html" class="btn btn-secondary">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                        Voltar
+                    </a>
+                    <a href="escalas-admin.html" class="btn btn-primary">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                        Gerenciar
+                    </a>
+                    <button id="theme-toggle" class="theme-toggle" aria-label="Alternar tema">
+                        <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <circle cx="12" cy="12" r="5"/>
+                            <line x1="12" y1="1" x2="12" y2="3"/>
+                            <line x1="12" y1="21" x2="12" y2="23"/>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                            <line x1="1" y1="12" x2="3" y2="12"/>
+                            <line x1="21" y1="12" x2="23" y2="12"/>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                        </svg>
+                        <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container main-container">
+        <!-- Controles de Navegação -->
+        <div class="card calendar-controls">
+            <div class="controls-header">
+                <button class="btn btn-secondary" id="prev-week">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <polyline points="15 18 9 12 15 6"/>
+                    </svg>
+                    Semana Anterior
+                </button>
+                <div class="current-period">
+                    <h2 id="period-display">Semana de 18 a 24 de Novembro, 2025</h2>
+                    <button class="btn btn-secondary btn-sm" id="today-btn">Hoje</button>
+                </div>
+                <button class="btn btn-secondary" id="next-week">
+                    Próxima Semana
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Calendário de Escalas -->
+        <div class="card">
+            <div class="calendar-grid">
+                <div class="calendar-header">
+                    <div class="time-column-header">Horário</div>
+                    <div class="day-header">
+                        <div class="day-name">Segunda</div>
+                        <div class="day-date" id="day-0">18/11</div>
+                    </div>
+                    <div class="day-header">
+                        <div class="day-name">Terça</div>
+                        <div class="day-date" id="day-1">19/11</div>
+                    </div>
+                    <div class="day-header">
+                        <div class="day-name">Quarta</div>
+                        <div class="day-date" id="day-2">20/11</div>
+                    </div>
+                    <div class="day-header">
+                        <div class="day-name">Quinta</div>
+                        <div class="day-date" id="day-3">21/11</div>
+                    </div>
+                    <div class="day-header">
+                        <div class="day-name">Sexta</div>
+                        <div class="day-date" id="day-4">22/11</div>
+                    </div>
+                    <div class="day-header weekend">
+                        <div class="day-name">Sábado</div>
+                        <div class="day-date" id="day-5">23/11</div>
+                    </div>
+                    <div class="day-header weekend">
+                        <div class="day-name">Domingo</div>
+                        <div class="day-date" id="day-6">24/11</div>
+                    </div>
+                </div>
+
+                <div class="calendar-body" id="calendar-body">
+                    <!-- Turnos serão inseridos aqui via JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Legenda -->
+        <div class="card legend-card">
+            <h3 style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" style="width: 1.25rem; height: 1.25rem;">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="16" x2="12" y2="12"/>
+                    <line x1="12" y1="8" x2="12.01" y2="8"/>
+                </svg>
+                Legenda de Turnos
+            </h3>
+            <div class="legend-grid" id="legend-grid">
+                <!-- Legenda será carregada dinamicamente -->
+            </div>
+        </div>
+
+        <!-- Lista de Analistas -->
+        <div class="card">
+            <h3 style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" style="width: 1.25rem; height: 1.25rem;">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                    <circle cx="9" cy="7" r="4"/>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+                Analistas NOC
+            </h3>
+            <div class="analysts-grid" id="analysts-grid">
+                <!-- Analistas serão carregados aqui -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>It Universe Tecnologia da Informacao LTDA | CNPJ 12.056.887/0001-19 | Rua Narciso Sturlini, 62 – Centro – Osasco/SP</p>
+        </div>
+    </footer>
+
+    <script src="js/api.js"></script>
+    <script src="js/escalas.js"></script>
+    <script src="js/utils.js"></script>
+</body>
+</html>

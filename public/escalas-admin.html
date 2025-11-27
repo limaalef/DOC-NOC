@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Escalas - NOC IT Universe</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/escalas.css">
+</head>
+<body class="dark-mode">
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <img src="https://ituniverse.com.br/wp-content/uploads/2025/02/logo-ITUniverse-negativ.svg" alt="IT Universe" class="logo-img">
+                    <div>
+                        <h1>Gerenciar Escalas</h1>
+                        <p class="subtitle">Configuração de Turnos e Analistas</p>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                    <a href="escalas.html" class="btn btn-secondary">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                        Voltar
+                    </a>
+                    <button id="theme-toggle" class="theme-toggle" aria-label="Alternar tema">
+                        <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <circle cx="12" cy="12" r="5"/>
+                            <line x1="12" y1="1" x2="12" y2="3"/>
+                            <line x1="12" y1="21" x2="12" y2="23"/>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                            <line x1="1" y1="12" x2="3" y2="12"/>
+                            <line x1="21" y1="12" x2="23" y2="12"/>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                        </svg>
+                        <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container main-container">
+        <div class="admin-layout">
+            <!-- Sidebar - Lista de Analistas -->
+            <aside class="sidebar">
+                <div class="card">
+                    <div style="margin-bottom: 1rem;">
+                        <label style="font-weight: 600; font-size: 0.875rem; margin-bottom: 0.5rem; display: block;">Visualizar:</label>
+                        <select id="sidebar-view" class="form-select" onchange="changeSidebarView(this.value)">
+                            <option value="analysts">Analistas</option>
+                            <option value="shifts">Turnos</option>
+                        </select>
+                    </div>
+
+                    <div id="sidebar-analysts">
+                        <h3 class="form-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                            Analistas
+                        </h3>
+                        <button class="btn btn-success" style="width: 100%; margin-bottom: 1rem;" onclick="newAnalyst()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <line x1="12" y1="5" x2="12" y2="19"/>
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                            </svg>
+                            Novo Analista
+                        </button>
+                        <div id="analysts-list" class="pop-list-admin"></div>
+                    </div>
+
+                    <div id="sidebar-shifts" style="display: none;">
+                        <h3 class="form-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                            Turnos
+                        </h3>
+                        <button class="btn btn-success" style="width: 100%; margin-bottom: 1rem;" onclick="newShift()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <line x1="12" y1="5" x2="12" y2="19"/>
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                            </svg>
+                            Novo Turno
+                        </button>
+                        <div id="shifts-list" class="pop-list-admin"></div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Formulário Principal -->
+            <main class="main-content">
+                <div class="card">
+                    <div id="alert-container"></div>
+
+                    <!-- Tabs -->
+                    <div class="tabs">
+                        <button class="tab-btn active" onclick="switchTab('analyst')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                            Analistas
+                        </button>
+                        <button class="tab-btn" onclick="switchTab('shifts')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                            Turnos
+                        </button>
+                        <button class="tab-btn" onclick="switchTab('schedule')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                <line x1="16" y1="2" x2="16" y2="6"/>
+                                <line x1="8" y1="2" x2="8" y2="6"/>
+                                <line x1="3" y1="10" x2="21" y2="10"/>
+                            </svg>
+                            Escalas
+                        </button>
+                    </div>
+
+                    <!-- Tab: Analista -->
+                    <div id="tab-analyst" class="tab-content active">
+                        <form id="analyst-form">
+                            <h3 class="form-title">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                </svg>
+                                <span id="form-analyst-title">Novo Analista</span>
+                            </h3>
+
+                            <div class="form-group">
+                                <label class="form-label">Nome Completo *</label>
+                                <input type="text" id="analyst-name" class="form-input" required placeholder="Ex: João Silva">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Cargo/Função *</label>
+                                <select id="analyst-role" class="form-select" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="Analista NOC N1">Analista NOC</option>
+                                    <option value="Analista NOC N2">Analista SD</option>
+                                    <option value="Coordenador NOC">Coordenador NOC</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Telefone *</label>
+                                <input type="tel" id="analyst-phone" class="form-input" required placeholder="+55 11 98765-4321">
+                                <p class="form-hint">Formato: +55 XX XXXXX-XXXX</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">E-mail</label>
+                                <input type="email" id="analyst-email" class="form-input" placeholder="joao.silva@ituniverse.com.br">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Status</label>
+                                <div style="display: flex; gap: 1rem; align-items: center;">
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                        <input type="radio" name="analyst-status" value="active" checked>
+                                        <span>Ativo</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                        <input type="radio" name="analyst-status" value="inactive">
+                                        <span>Inativo</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <hr class="section-divider">
+
+                            <div class="btn-group">
+                                <button type="submit" class="btn btn-primary">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                                        <polyline points="17 21 17 13 7 13 7 21"/>
+                                        <polyline points="7 3 7 8 15 8"/>
+                                    </svg>
+                                    Salvar Analista
+                                </button>
+                                <button type="button" class="btn btn-secondary" onclick="clearAnalystForm()">
+                                    Limpar
+                                </button>
+                                <button type="button" class="btn btn-danger" id="delete-analyst-btn" style="display: none;" onclick="deleteAnalyst()">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <polyline points="3 6 5 6 21 6"/>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                    </svg>
+                                    Excluir
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Tab: Turnos -->
+                    <div id="tab-shifts" class="tab-content">
+                        <form id="shift-form">
+                            <h3 class="form-title">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <polyline points="12 6 12 12 16 14"/>
+                                </svg>
+                                <span id="form-shift-title">Novo Turno</span>
+                            </h3>
+
+                            <div class="form-group">
+                                <label class="form-label">Nome do Turno *</label>
+                                <input type="text" id="shift-name" class="form-input" required placeholder="Ex: Comercial 08-17">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Horário de Início *</label>
+                                <input type="time" id="shift-start" class="form-input" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Horário de Término *</label>
+                                <input type="time" id="shift-end" class="form-input" required>
+                                <p class="form-hint">Para turnos noturnos que ultrapassam meia-noite, o término será no dia seguinte</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Cor de Identificação *</label>
+                                <select id="shift-color" class="form-select" required>
+                                    <option value="morning">Amarelo (Manhã)</option>
+                                    <option value="afternoon">Laranja (Tarde)</option>
+                                    <option value="night">Azul (Noite)</option>
+                                    <option value="dawn">Roxo (Madrugada)</option>
+                                    <option value="full">Verde (Dia Completo)</option>
+                                </select>
+                            </div>
+
+                            <hr class="section-divider">
+
+                            <div class="btn-group">
+                                <button type="submit" class="btn btn-primary">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                                        <polyline points="17 21 17 13 7 13 7 21"/>
+                                        <polyline points="7 3 7 8 15 8"/>
+                                    </svg>
+                                    Salvar Turno
+                                </button>
+                                <button type="button" class="btn btn-secondary" onclick="clearShiftForm()">
+                                    Limpar
+                                </button>
+                                <button type="button" class="btn btn-danger" id="delete-shift-btn" style="display: none;" onclick="deleteShift()">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <polyline points="3 6 5 6 21 6"/>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                    </svg>
+                                    Excluir
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Tab: Escala -->
+                    <div id="tab-schedule" class="tab-content">
+                        <form id="schedule-form">
+                            <h3 class="form-title">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                    <line x1="16" y1="2" x2="16" y2="6"/>
+                                    <line x1="8" y1="2" x2="8" y2="6"/>
+                                    <line x1="3" y1="10" x2="21" y2="10"/>
+                                </svg>
+                                Definir Escala
+                            </h3>
+
+                            <div class="alert-box alert-info" style="margin-bottom: 1.5rem;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" style="width: 1.25rem; height: 1.25rem; flex-shrink: 0;">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <line x1="12" y1="16" x2="12" y2="12"/>
+                                    <line x1="12" y1="8" x2="12.01" y2="8"/>
+                                </svg>
+                                <span>Defina escalas individuais por data para turnos 12x36, 6x1, 5x1 e 5x2</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Data *</label>
+                                <input type="date" id="schedule-date" class="form-input" required>
+                                <p class="form-hint">Selecione o dia específico da escala</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Turno *</label>
+                                <select id="schedule-shift" class="form-select" required>
+                                    <option value="">Selecione...</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Analista Responsável *</label>
+                                <select id="schedule-analyst" class="form-select" required>
+                                    <option value="">Selecione...</option>
+                                </select>
+                            </div>
+
+                            <hr class="section-divider">
+
+                            <div class="btn-group">
+                                <button type="submit" class="btn btn-primary">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                                        <polyline points="17 21 17 13 7 13 7 21"/>
+                                        <polyline points="7 3 7 8 15 8"/>
+                                    </svg>
+                                    Salvar Escala
+                                </button>
+                                <button type="button" class="btn btn-secondary" onclick="clearScheduleForm()">
+                                    Limpar
+                                </button>
+                            </div>
+                        </form>
+
+                        <!-- Preview da Semana -->
+                        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+                            <h4 style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" style="width: 1.25rem; height: 1.25rem;">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                    <circle cx="12" cy="12" r="3"/>
+                                </svg>
+                                Escalas Cadastradas
+                            </h4>
+                            <div id="schedule-preview" class="schedule-preview">
+                                <!-- Preview será carregado aqui -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>It Universe Tecnologia da Informacao LTDA | CNPJ 12.056.887/0001-19 | Rua Narciso Sturlini, 62 – Centro – Osasco/SP</p>
+        </div>
+    </footer>
+
+    <script src="js/api.js"></script>
+    <script src="js/escalas-admin.js"></script>
+    <script src="js/utils.js"></script>
+</body>
+</html>
